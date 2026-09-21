@@ -93,7 +93,7 @@
 
   .title {
     position: absolute;
-    top: -10px;              /* ⬅️ frase subida */
+    top: -10px;
     width: 100%;
     text-align: center;
     font-style: italic;
@@ -166,12 +166,21 @@
     box-shadow: inset -2px -2px 5px rgba(0,0,0,.12),
                 inset 2px 2px 4px rgba(255,255,255,.5);
   }
+
+  /* ====== CENTRO DE LA FLOR (CORREGIDO) ====== */
   .core {
     position: absolute;
     left: 50%; top: 50%;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #8a5a1a, #4a2c00 70%);
-    box-shadow: inset 0 0 6px rgba(0,0,0,.6);
+    background:
+      radial-gradient(circle at 35% 35%, #b07a2a 0%, #8a5a1a 45%, #5c3a0a 100%),
+      radial-gradient(circle, rgba(0,0,0,.18) 1px, transparent 1.6px);
+    background-size: 100% 100%, 6px 6px;
+    background-position: 0 0, 0 0;
+    box-shadow:
+      inset 0 0 4px rgba(0,0,0,.35),
+      inset 0 -3px 6px rgba(0,0,0,.25),
+      0 0 6px rgba(120,80,0,.25);
     transform: translate(-50%,-50%);
   }
 
@@ -232,7 +241,6 @@
   }
   .ribbon::before { left: -38px; transform: rotate(-25deg); }
   .ribbon::after  { right: -38px; transform: rotate(25deg) scaleX(-1); }
-  /* Nudo central */
   .ribbon .knot {
     position: absolute;
     left: 50%; top: 50%;
@@ -246,7 +254,6 @@
 </head>
 <body>
 
-<!-- Pétalos cayendo -->
 <div class="petals-fall" id="petalsFall"></div>
 
 <div class="stage">
@@ -321,8 +328,8 @@
 
     const core = document.createElement('div');
     core.className = 'core';
-    core.style.width = (f.s * 0.34) + 'px';
-    core.style.height = (f.s * 0.34) + 'px';
+    core.style.width = (f.s * 0.28) + 'px';   // ⬅️ más pequeño
+    core.style.height = (f.s * 0.28) + 'px';
     flower.appendChild(core);
 
     head.appendChild(flower);
@@ -330,18 +337,18 @@
 
   /* ========= PÉTALOS CAYENDO ========= */
   const fallBox = document.getElementById('petalsFall');
-  const tones = ['', 'orange', 'white', 'orange', '', 'white']; // mezcla
+  const tones = ['', 'orange', 'white', 'orange', '', 'white'];
   const TOTAL = 22;
 
   for (let i = 0; i < TOTAL; i++) {
     const p = document.createElement('div');
     p.className = 'falling ' + tones[i % tones.length];
 
-    const size = 10 + Math.random() * 16;      // 10–26 px
+    const size = 10 + Math.random() * 16;
     p.style.width = size + 'px';
     p.style.height = (size * 1.2) + 'px';
     p.style.left = Math.random() * 100 + 'vw';
-    p.style.animationDuration = (6 + Math.random() * 6) + 's'; // 6–12 s
+    p.style.animationDuration = (6 + Math.random() * 6) + 's';
     p.style.animationDelay = (Math.random() * 8) + 's';
     p.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
     p.style.opacity = 0.5 + Math.random() * 0.5;
