@@ -9,7 +9,7 @@
 
   body {
     min-height: 100vh;
-    background: radial-gradient(circle at 50% 30%, #fff6d6, #ffe066 60%, #f5c400);
+    background: radial-gradient(circle at 50% 40%, #fff8dc, #ffe680 55%, #f2c200);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,221 +17,239 @@
     font-family: 'Georgia', serif;
   }
 
-  /* Contenedor del ramo */
-  .bouquet {
+  .stage {
     position: relative;
-    width: 420px;
+    width: 480px;
+    height: 640px;
+  }
+
+  .title {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    color: #7a5c00;
+    font-size: 1.15rem;
+    z-index: 20;
+  }
+
+  /* ====== RAMO ====== */
+  .bouquet {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 380px;
     height: 520px;
   }
 
-  /* Papel que envuelve el ramo */
+  /* Tallos: todos nacen del punto de amarre */
+  .stems {
+    position: absolute;
+    bottom: 130px;                 /* punto de amarre */
+    left: 50%;
+    width: 0; height: 0;
+    z-index: 1;
+  }
+  .stem {
+    position: absolute;
+    bottom: 0;
+    left: -3px;
+    width: 6px;
+    height: 230px;
+    background: linear-gradient(90deg, #2f5f1f, #4d8b2c, #2f5f1f);
+    border-radius: 3px;
+    transform-origin: bottom center;
+  }
+
+  /* Cabeza del ramo: domo donde van las flores */
+  .head {
+    position: absolute;
+    bottom: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 260px;
+    z-index: 5;
+  }
+
+  .flower {
+    position: absolute;
+    transform-origin: center;
+    animation: sway 4s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%,100% { transform: translateY(0) rotate(-2deg); }
+    50%     { transform: translateY(-4px) rotate(2deg); }
+  }
+
+  .petal {
+    position: absolute;
+    left: 50%; top: 50%;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: inset -2px -2px 5px rgba(0,0,0,.12),
+                inset 2px 2px 4px rgba(255,255,255,.5);
+  }
+  .core {
+    position: absolute;
+    left: 50%; top: 50%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #8a5a1a, #4a2c00 70%);
+    box-shadow: inset 0 0 6px rgba(0,0,0,.6);
+    transform: translate(-50%,-50%);
+  }
+
+  /* Colores */
+  .f-yellow .petal { background: radial-gradient(circle at 30% 30%, #fff0a1, #f9c400); }
+  .f-orange .petal { background: radial-gradient(circle at 30% 30%, #ffe08a, #ff9d1c); }
+  .f-white  .petal { background: radial-gradient(circle at 30% 30%, #ffffff, #f1e6a6); }
+
+  /* ====== PAPEL QUE ENVUELVE ====== */
   .wrap {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 320px;
-    height: 380px;
-    background: linear-gradient(160deg, #fffbe6, #ffd93b);
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    border-radius: 0 0 40% 40% / 0 0 25% 25%;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    z-index: 1;
+    width: 300px;
+    height: 300px;
+    z-index: 10;
   }
-
-  /* Capa interior del papel */
-  .wrap::before {
-    content: "";
+  /* Capa trasera */
+  .wrap .back {
     position: absolute;
-    inset: 15px 15px 0 15px;
-    background: linear-gradient(160deg, #ffffff, #ffe98a);
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    opacity: 0.9;
+    inset: 0;
+    background: linear-gradient(160deg, #fffbe6, #ffd93b);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    border-radius: 0 0 30% 30% / 0 0 20% 20%;
+    box-shadow: 0 18px 35px rgba(0,0,0,.18);
+  }
+  /* Capa frontal (delantera) */
+  .wrap .front {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #fffef7, #ffe98a);
+    clip-path: polygon(30% 10%, 70% 10%, 100% 100%, 0% 100%);
+    border-radius: 0 0 35% 35% / 0 0 22% 22%;
+    opacity: .95;
   }
 
-  /* Lazo */
+  /* ====== LAZO ====== */
   .ribbon {
     position: absolute;
-    bottom: 170px;
+    bottom: 265px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90px;
-    height: 40px;
-    background: #e0a800;
-    border-radius: 50%;
-    box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2);
-    z-index: 5;
+    width: 60px;
+    height: 30px;
+    background: linear-gradient(180deg, #f5c400, #d9a300);
+    border-radius: 6px;
+    z-index: 15;
+    box-shadow: 0 4px 8px rgba(0,0,0,.2);
   }
-
   .ribbon::before,
   .ribbon::after {
     content: "";
     position: absolute;
-    top: -20px;
+    top: -18px;
     width: 55px;
     height: 55px;
-    background: #f5c400;
-    border-radius: 50% 50% 0 50%;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    background: linear-gradient(160deg, #ffe066, #e6b800);
+    border-radius: 60% 60% 40% 40% / 70% 70% 30% 30%;
+    box-shadow: 0 4px 8px rgba(0,0,0,.15);
   }
-  .ribbon::before { left: -35px; transform: rotate(-20deg); }
-  .ribbon::after  { right: -35px; transform: rotate(20deg) scaleX(-1); }
-
-  /* Tallos */
-  .stems {
-    position: absolute;
-    bottom: 180px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 200px;
-    z-index: 0;
-  }
-  .stem {
-    position: absolute;
-    bottom: 0;
-    width: 6px;
-    height: 200px;
-    background: linear-gradient(#3d7a2a, #1f4a15);
-    border-radius: 3px;
-    transform-origin: bottom center;
-  }
-
-  /* Flor genérica */
-  .flower {
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    z-index: 3;
-    animation: sway 4s ease-in-out infinite;
-  }
-  @keyframes sway {
-    0%, 100% { transform: rotate(-3deg); }
-    50%      { transform: rotate(3deg); }
-  }
-
-  /* Pétalos */
-  .petal {
-    position: absolute;
-    width: 34px;
-    height: 34px;
-    background: radial-gradient(circle at 30% 30%, #ffe97a, #f7b500);
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    left: 50%;
-    top: 50%;
-    transform-origin: 0 0;
-    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.1);
-  }
-
-  /* Centro de la flor */
-  .center {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background: radial-gradient(circle, #6b4a00, #3b2600);
-    border-radius: 50%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    box-shadow: inset 0 0 6px #000;
-  }
-
-  /* Colores alternos para las flores */
-  .flower.pink .petal  { background: radial-gradient(circle at 30% 30%, #fff0a1, #ffc107); }
-  .flower.orange .petal{ background: radial-gradient(circle at 30% 30%, #ffe08a, #ff9d00); }
-  .flower.white .petal { background: radial-gradient(circle at 30% 30%, #ffffff, #f3e6a8); }
-
-  /* Frase */
-  .message {
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.1rem;
-    color: #7a5c00;
-    text-align: center;
-    font-style: italic;
-    width: 90%;
-    text-shadow: 0 1px 2px #fff8c9;
-  }
+  .ribbon::before { left: -38px; transform: rotate(-25deg); }
+  .ribbon::after  { right: -38px; transform: rotate(25deg) scaleX(-1); }
 </style>
 </head>
 <body>
 
-  <div class="bouquet">
-    <p class="message">Un ramo buchón de flores amarillas para ti 💛</p>
+<div class="stage">
+  <p class="title">Un ramo buchón de flores amarillas para ti 💛</p>
 
-    <!-- Tallos -->
+  <div class="bouquet">
+    <!-- Tallos desde un solo punto -->
     <div class="stems">
-      <div class="stem" style="transform: rotate(-20deg);"></div>
-      <div class="stem" style="transform: rotate(-10deg);"></div>
-      <div class="stem" style="transform: rotate(0deg);"></div>
-      <div class="stem" style="transform: rotate(10deg);"></div>
-      <div class="stem" style="transform: rotate(20deg);"></div>
+      <div class="stem" style="transform: rotate(-24deg); height:250px;"></div>
+      <div class="stem" style="transform: rotate(-14deg); height:250px;"></div>
+      <div class="stem" style="transform: rotate(-5deg);  height:250px;"></div>
+      <div class="stem" style="transform: rotate(5deg);   height:250px;"></div>
+      <div class="stem" style="transform: rotate(14deg);  height:250px;"></div>
+      <div class="stem" style="transform: rotate(24deg);  height:250px;"></div>
     </div>
 
-    <!-- Papel -->
-    <div class="wrap"></div>
+    <!-- Flores apiñadas formando un domo -->
+    <div class="head" id="head"></div>
 
-    <!-- Lazo -->
+    <!-- Papel + lazo -->
+    <div class="wrap">
+      <div class="back"></div>
+      <div class="front"></div>
+    </div>
     <div class="ribbon"></div>
-
-    <!-- Flores (se generan con JS) -->
-    <div id="flowers"></div>
   </div>
+</div>
 
 <script>
-  // Genera flores de forma automática
-  const positions = [
-    { x: 165, y: 160, size: 110, color: '' },       // centro grande
-    { x: 90,  y: 200, size: 90,  color: 'orange' },
-    { x: 240, y: 200, size: 90,  color: 'pink' },
-    { x: 60,  y: 260, size: 80,  color: 'white' },
-    { x: 270, y: 260, size: 80,  color: 'orange' },
-    { x: 120, y: 110, size: 80,  color: 'pink' },
-    { x: 210, y: 110, size: 80,  color: 'white' },
-    { x: 165, y: 260, size: 85,  color: '' },
+  // Posiciones calculadas para formar un DOMO (arco) apiñado
+  // x, y relativos a .head (320x260). Más cerca del centro = más arriba.
+  const flowers = [
+    // fila superior (puntas del domo)
+    { x: 140, y: 0,   s: 90, c: 'f-yellow' },
+    // segunda fila
+    { x: 70,  y: 30,  s: 90, c: 'f-orange' },
+    { x: 150, y: 25,  s: 100,c: 'f-yellow' },
+    { x: 215, y: 30,  s: 90, c: 'f-white'  },
+    // tercera fila (más ancha)
+    { x: 15,  y: 75,  s: 95, c: 'f-yellow' },
+    { x: 95,  y: 70,  s: 105,c: 'f-orange' },
+    { x: 175, y: 70,  s: 105,c: 'f-yellow' },
+    { x: 245, y: 75,  s: 95, c: 'f-white'  },
+    // fila inferior (base del domo, tapa el punto de amarre)
+    { x: 40,  y: 130, s: 100,c: 'f-orange' },
+    { x: 120, y: 135, s: 110,c: 'f-yellow' },
+    { x: 200, y: 130, s: 100,c: 'f-orange' },
+    // rellenos pequeños
+    { x: 165, y: 105, s: 85, c: 'f-white'  },
   ];
 
-  const container = document.getElementById('flowers');
+  const head = document.getElementById('head');
 
-  positions.forEach((p, i) => {
+  flowers.forEach((f, i) => {
     const flower = document.createElement('div');
-    flower.className = 'flower ' + p.color;
-    flower.style.left = p.x + 'px';
-    flower.style.top = p.y + 'px';
-    flower.style.width = p.size + 'px';
-    flower.style.height = p.size + 'px';
-    flower.style.animationDelay = (i * 0.3) + 's';
+    flower.className = 'flower ' + f.c;
+    flower.style.left = f.x + 'px';
+    flower.style.top = f.y + 'px';
+    flower.style.width = f.s + 'px';
+    flower.style.height = f.s + 'px';
+    flower.style.animationDelay = (i * 0.25) + 's';
+    flower.style.zIndex = 100 - i; // las de arriba se ven encima
 
-    // Pétalos alrededor
-    const petals = 8;
-    for (let j = 0; j < petals; j++) {
+    const petalCount = 8;
+    const petalW = f.s * 0.42;
+    const petalH = f.s * 0.50;
+    const radius = f.s * 0.22;
+
+    for (let j = 0; j < petalCount; j++) {
       const petal = document.createElement('div');
       petal.className = 'petal';
-      const angle = (360 / petals) * j;
-      petal.style.transform = `rotate(${angle}deg) translate(0, -${p.size * 0.28}px)`;
-      petal.style.width = (p.size * 0.38) + 'px';
-      petal.style.height = (p.size * 0.45) + 'px';
-      petal.style.left = '50%';
-      petal.style.top = '50%';
-      petal.style.transformOrigin = 'center';
-      petal.style.position = 'absolute';
-      petal.style.marginLeft = `-${p.size * 0.19}px`;
-      petal.style.marginTop = `-${p.size * 0.22}px`;
-      petal.style.transform = `rotate(${angle}deg) translateY(-${p.size * 0.22}px)`;
+      const angle = (360 / petalCount) * j;
+      petal.style.width = petalW + 'px';
+      petal.style.height = petalH + 'px';
+      petal.style.marginLeft = -(petalW / 2) + 'px';
+      petal.style.marginTop = -(petalH / 2) + 'px';
+      petal.style.transform =
+        `translate(-50%,-50%) rotate(${angle}deg) translateY(-${radius}px)`;
       flower.appendChild(petal);
     }
 
-    // Centro
-    const center = document.createElement('div');
-    center.className = 'center';
-    center.style.width = (p.size * 0.35) + 'px';
-    center.style.height = (p.size * 0.35) + 'px';
-    flower.appendChild(center);
+    const core = document.createElement('div');
+    core.className = 'core';
+    core.style.width = (f.s * 0.34) + 'px';
+    core.style.height = (f.s * 0.34) + 'px';
+    flower.appendChild(core);
 
-    container.appendChild(flower);
+    head.appendChild(flower);
   });
 </script>
 </body>
