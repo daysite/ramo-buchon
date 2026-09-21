@@ -115,7 +115,7 @@
   }
   @keyframes typing {
     from { width: 0; }
-    to   { width: 46ch; }   /* 46 = número de caracteres de la frase */
+    to   { width: 46ch; }
   }
   @keyframes blink {
     0%, 100% { border-color: #7a5c00; }
@@ -166,19 +166,34 @@
     z-index: 5;
   }
 
-  /* ====== HOJAS VERDES ====== */
+  /* ====== HOJAS VERDES (MEJORADAS) ====== */
   .leaf {
     position: absolute;
-    background: linear-gradient(135deg, #6fb03a 0%, #3f7a20 70%, #2c5814 100%);
+    /* Verde más suave y oliva para que no choque con el amarillo */
+    background: linear-gradient(135deg, #a4cf6b 0%, #6b9e38 55%, #47701f 100%);
     border-radius: 0 100% 0 100%;
     box-shadow:
-      inset -2px -2px 4px rgba(0,0,0,.2),
-      inset 2px 2px 3px rgba(255,255,255,.25),
-      0 2px 3px rgba(0,0,0,.15);
-    transform-origin: 0% 100%;  /* la base de la hoja es el punto de anclaje */
+      inset -2px -2px 5px rgba(0,0,0,.22),
+      inset 2px 2px 3px rgba(255,255,255,.35),
+      0 2px 4px rgba(0,0,0,.18);
+    transform-origin: 0% 100%;
     z-index: 4;
     animation: leafSway 5s ease-in-out infinite;
   }
+  /* Tallito que conecta la hoja con el ramo */
+  .leaf::before {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: -6px;
+    width: 16px;
+    height: 5px;
+    background: linear-gradient(90deg, #47701f, #2f5f1f);
+    border-radius: 3px;
+    transform-origin: right center;
+    box-shadow: inset 0 -1px 2px rgba(0,0,0,.25);
+  }
+  /* Nervadura central suave */
   .leaf::after {
     content: "";
     position: absolute;
@@ -186,10 +201,10 @@
     border-radius: inherit;
     background:
       linear-gradient(90deg,
-        transparent 47%,
-        rgba(255,255,255,.35) 48%,
-        rgba(255,255,255,.35) 52%,
-        transparent 53%);
+        transparent 46%,
+        rgba(255,255,255,.45) 48%,
+        rgba(255,255,255,.45) 52%,
+        transparent 54%);
     pointer-events: none;
   }
   @keyframes leafSway {
@@ -406,12 +421,10 @@
 </head>
 <body>
 
-<!-- Pétalos cayendo -->
 <div class="petals-fall" id="petalsFall"></div>
 
 <div class="stage">
 
-  <!-- Frase que se escribe letra por letra -->
   <div class="title-wrap">
     <p class="title">Un ramo buchón de flores amarillas para ti 💛</p>
   </div>
@@ -426,7 +439,6 @@
       <div class="stem" style="transform: rotate(24deg);  height:250px;"></div>
     </div>
 
-    <!-- Hojas generadas por JS -->
     <div class="head" id="head"></div>
 
     <div class="wrap">
@@ -437,7 +449,6 @@
     <div class="ribbon"><div class="knot"></div></div>
   </div>
 
-  <!-- Botón + mensaje -->
   <button class="why-btn" id="whyBtn">¿Quieres saber por qué te lo regalo? 💌</button>
   <div class="why-msg" id="whyMsg">
     Porque las flores amarillas se regalan a quien ilumina tus días.
@@ -446,27 +457,25 @@
 </div>
 
 <script>
-  /* ========= HOJAS VERDES =========
-     Se colocan alrededor del ramo, entre las flores.
-     Cada hoja nace desde un punto (x,y) y se orienta con rotate. */
+  /* ========= HOJAS VERDES (posiciones ajustadas) ========= */
   const leaves = [
-    // Fondo (detrás de las flores, z-index menor)
-    { x: 60,  y: 150, w: 55, h: 22, r: -55, delay: 0.0, back: true },
-    { x: 270, y: 150, w: 55, h: 22, r:  55, delay: 0.5, back: true },
-    { x: 30,  y: 200, w: 60, h: 24, r: -35, delay: 1.0, back: true },
-    { x: 300, y: 200, w: 60, h: 24, r:  35, delay: 1.5, back: true },
-    { x: 140, y: 30,  w: 50, h: 20, r: -80, delay: 0.7, back: true },
-    { x: 200, y: 30,  w: 50, h: 20, r:  80, delay: 1.2, back: true },
+    // FONDO (detrás de las flores) — hojas orientadas hacia afuera
+    { x: 55,  y: 155, w: 55, h: 22, r: -60, delay: 0.0, back: true },
+    { x: 270, y: 155, w: 55, h: 22, r:  60, delay: 0.5, back: true },
+    { x: 25,  y: 205, w: 60, h: 24, r: -40, delay: 1.0, back: true },
+    { x: 300, y: 205, w: 60, h: 24, r:  40, delay: 1.5, back: true },
+    { x: 135, y: 25,  w: 50, h: 20, r: -75, delay: 0.7, back: true },
+    { x: 205, y: 25,  w: 50, h: 20, r:  75, delay: 1.2, back: true },
 
-    // Frente (delante de las flores, z-index alto)
-    { x: 90,  y: 230, w: 60, h: 24, r: -20, delay: 0.3, back: false },
-    { x: 240, y: 230, w: 60, h: 24, r:  20, delay: 0.8, back: false },
-    { x: 165, y: 245, w: 55, h: 22, r:   0, delay: 1.4, back: false },
+    // FRENTE (delante de las flores) — más pequeñas, cerca del lazo
+    { x: 105, y: 245, w: 48, h: 18, r: -25, delay: 0.3, back: false },
+    { x: 225, y: 245, w: 48, h: 18, r:  25, delay: 0.8, back: false },
+    { x: 165, y: 255, w: 42, h: 16, r:   0, delay: 1.4, back: false },
   ];
 
   const head = document.getElementById('head');
 
-  /* Primero las hojas del fondo (z-index bajo) */
+  /* Hojas del fondo (z-index bajo) */
   leaves.filter(l => l.back).forEach(l => {
     const leaf = document.createElement('div');
     leaf.className = 'leaf';
@@ -531,7 +540,7 @@
     head.appendChild(flower);
   });
 
-  /* Ahora las hojas del frente (encima de las flores) */
+  /* Hojas del frente (encima de las flores) */
   leaves.filter(l => !l.back).forEach(l => {
     const leaf = document.createElement('div');
     leaf.className = 'leaf';
@@ -542,13 +551,12 @@
     leaf.style.setProperty('--r', l.r + 'deg');
     leaf.style.transform = `rotate(${l.r}deg)`;
     leaf.style.animationDelay = l.delay + 's';
-    leaf.style.zIndex = 200;    // por encima de las flores
+    leaf.style.zIndex = 200;
     head.appendChild(leaf);
   });
 
   /* ========= PÉTALOS CAYENDO ========= */
   const fallBox = document.getElementById('petalsFall');
-  // Mezcla: más amarillos, algunos naranjas, blancos y unas hojitas verdes
   const tones = ['', '', 'orange', '', 'white', '', 'orange', 'green', '', 'white'];
   const TOTAL = 26;
 
