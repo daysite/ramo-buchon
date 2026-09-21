@@ -1,63 +1,238 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ramo Buchón de Flores Amarillas 🌻</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #fff8dc, #ffe066);
-      color: #4a3b00;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .card {
-      background: #fffdf5;
-      max-width: 600px;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      text-align: center;
-      border: 3px solid #ffd700;
-    }
-    h1 { font-size: 2rem; margin-bottom: 10px; color: #b8860b; }
-    h2 { font-size: 1.2rem; font-weight: normal; margin-bottom: 25px; color: #8a6d00; }
-    .emoji { font-size: 3rem; margin: 15px 0; }
-    ul { text-align: left; margin: 20px auto; max-width: 400px; line-height: 1.8; }
-    li { margin-bottom: 8px; }
-    .frase {
-      font-style: italic;
-      margin-top: 25px;
-      padding: 15px;
-      background: #fff3b0;
-      border-radius: 10px;
-      color: #6b5500;
-    }
-    footer { margin-top: 25px; font-size: 0.85rem; color: #a08c3c; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramo Buchón 💛</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: radial-gradient(circle at 50% 30%, #fff6d6, #ffe066 60%, #f5c400);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Georgia', serif;
+  }
+
+  /* Contenedor del ramo */
+  .bouquet {
+    position: relative;
+    width: 420px;
+    height: 520px;
+  }
+
+  /* Papel que envuelve el ramo */
+  .wrap {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 380px;
+    background: linear-gradient(160deg, #fffbe6, #ffd93b);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    border-radius: 0 0 40% 40% / 0 0 25% 25%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  /* Capa interior del papel */
+  .wrap::before {
+    content: "";
+    position: absolute;
+    inset: 15px 15px 0 15px;
+    background: linear-gradient(160deg, #ffffff, #ffe98a);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    opacity: 0.9;
+  }
+
+  /* Lazo */
+  .ribbon {
+    position: absolute;
+    bottom: 170px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 40px;
+    background: #e0a800;
+    border-radius: 50%;
+    box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2);
+    z-index: 5;
+  }
+
+  .ribbon::before,
+  .ribbon::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    width: 55px;
+    height: 55px;
+    background: #f5c400;
+    border-radius: 50% 50% 0 50%;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+  }
+  .ribbon::before { left: -35px; transform: rotate(-20deg); }
+  .ribbon::after  { right: -35px; transform: rotate(20deg) scaleX(-1); }
+
+  /* Tallos */
+  .stems {
+    position: absolute;
+    bottom: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    z-index: 0;
+  }
+  .stem {
+    position: absolute;
+    bottom: 0;
+    width: 6px;
+    height: 200px;
+    background: linear-gradient(#3d7a2a, #1f4a15);
+    border-radius: 3px;
+    transform-origin: bottom center;
+  }
+
+  /* Flor genérica */
+  .flower {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    z-index: 3;
+    animation: sway 4s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50%      { transform: rotate(3deg); }
+  }
+
+  /* Pétalos */
+  .petal {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    background: radial-gradient(circle at 30% 30%, #ffe97a, #f7b500);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    left: 50%;
+    top: 50%;
+    transform-origin: 0 0;
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Centro de la flor */
+  .center {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, #6b4a00, #3b2600);
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: inset 0 0 6px #000;
+  }
+
+  /* Colores alternos para las flores */
+  .flower.pink .petal  { background: radial-gradient(circle at 30% 30%, #fff0a1, #ffc107); }
+  .flower.orange .petal{ background: radial-gradient(circle at 30% 30%, #ffe08a, #ff9d00); }
+  .flower.white .petal { background: radial-gradient(circle at 30% 30%, #ffffff, #f3e6a8); }
+
+  /* Frase */
+  .message {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1rem;
+    color: #7a5c00;
+    text-align: center;
+    font-style: italic;
+    width: 90%;
+    text-shadow: 0 1px 2px #fff8c9;
+  }
+</style>
 </head>
 <body>
-  <div class="card">
-    <div class="emoji">🌻💛🌼</div>
-    <h1>Ramo Buchón de Flores Amarillas</h1>
-    <h2>Un detalle hecho a mano para alegrar el día</h2>
 
-    <ul>
-      <li>🌻 Girasoles como centro</li>
-      <li>🌼 Margaritas y crisantemos</li>
-      <li>🌹 Rosas amarillas</li>
-      <li>✨ Solidago para dar volumen</li>
-      <li>🎀 Lazo de rafia o yute</li>
-    </ul>
+  <div class="bouquet">
+    <p class="message">Un ramo buchón de flores amarillas para ti 💛</p>
 
-    <p class="frase">"Las flores amarillas no se regalan por moda, se regalan para decir lo que a veces no sabemos expresar."</p>
+    <!-- Tallos -->
+    <div class="stems">
+      <div class="stem" style="transform: rotate(-20deg);"></div>
+      <div class="stem" style="transform: rotate(-10deg);"></div>
+      <div class="stem" style="transform: rotate(0deg);"></div>
+      <div class="stem" style="transform: rotate(10deg);"></div>
+      <div class="stem" style="transform: rotate(20deg);"></div>
+    </div>
 
-    <footer>Hecho con 💛 para el Día de las Flores Amarillas</footer>
+    <!-- Papel -->
+    <div class="wrap"></div>
+
+    <!-- Lazo -->
+    <div class="ribbon"></div>
+
+    <!-- Flores (se generan con JS) -->
+    <div id="flowers"></div>
   </div>
+
+<script>
+  // Genera flores de forma automática
+  const positions = [
+    { x: 165, y: 160, size: 110, color: '' },       // centro grande
+    { x: 90,  y: 200, size: 90,  color: 'orange' },
+    { x: 240, y: 200, size: 90,  color: 'pink' },
+    { x: 60,  y: 260, size: 80,  color: 'white' },
+    { x: 270, y: 260, size: 80,  color: 'orange' },
+    { x: 120, y: 110, size: 80,  color: 'pink' },
+    { x: 210, y: 110, size: 80,  color: 'white' },
+    { x: 165, y: 260, size: 85,  color: '' },
+  ];
+
+  const container = document.getElementById('flowers');
+
+  positions.forEach((p, i) => {
+    const flower = document.createElement('div');
+    flower.className = 'flower ' + p.color;
+    flower.style.left = p.x + 'px';
+    flower.style.top = p.y + 'px';
+    flower.style.width = p.size + 'px';
+    flower.style.height = p.size + 'px';
+    flower.style.animationDelay = (i * 0.3) + 's';
+
+    // Pétalos alrededor
+    const petals = 8;
+    for (let j = 0; j < petals; j++) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      const angle = (360 / petals) * j;
+      petal.style.transform = `rotate(${angle}deg) translate(0, -${p.size * 0.28}px)`;
+      petal.style.width = (p.size * 0.38) + 'px';
+      petal.style.height = (p.size * 0.45) + 'px';
+      petal.style.left = '50%';
+      petal.style.top = '50%';
+      petal.style.transformOrigin = 'center';
+      petal.style.position = 'absolute';
+      petal.style.marginLeft = `-${p.size * 0.19}px`;
+      petal.style.marginTop = `-${p.size * 0.22}px`;
+      petal.style.transform = `rotate(${angle}deg) translateY(-${p.size * 0.22}px)`;
+      flower.appendChild(petal);
+    }
+
+    // Centro
+    const center = document.createElement('div');
+    center.className = 'center';
+    center.style.width = (p.size * 0.35) + 'px';
+    center.style.height = (p.size * 0.35) + 'px';
+    flower.appendChild(center);
+
+    container.appendChild(flower);
+  });
+</script>
 </body>
 </html>
