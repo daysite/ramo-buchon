@@ -61,7 +61,6 @@
     height: 640px;
   }
 
-  /* Halo suave detrás del ramo */
   .stage::before {
     content: "";
     position: absolute;
@@ -76,7 +75,6 @@
     pointer-events: none;
   }
 
-  /* Sombra en el piso */
   .stage::after {
     content: "";
     position: absolute;
@@ -149,9 +147,15 @@
     z-index: 5;
   }
 
+  /* ====== FLOR REESTRUCTURADA ======
+     Cada .flower es un punto (0x0) ubicado con left/top.
+     Los hijos se posicionan alrededor de ese punto con
+     transform: translate(-50%,-50%). Así el core queda
+     EXACTAMENTE en el centro de la flor. */
   .flower {
     position: absolute;
-    transform-origin: center;
+    width: 0;
+    height: 0;
     animation: sway 4s ease-in-out infinite;
   }
   @keyframes sway {
@@ -161,16 +165,18 @@
 
   .petal {
     position: absolute;
-    left: 50%; top: 50%;
+    left: 0;
+    top: 0;
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     box-shadow: inset -2px -2px 5px rgba(0,0,0,.12),
                 inset 2px 2px 4px rgba(255,255,255,.5);
+    transform-origin: center center;
   }
 
-  /* ====== CENTRO DE LA FLOR (CORREGIDO) ====== */
   .core {
     position: absolute;
-    left: 50%; top: 50%;
+    left: 0;
+    top: 0;
     border-radius: 50%;
     background:
       radial-gradient(circle at 35% 35%, #b07a2a 0%, #8a5a1a 45%, #5c3a0a 100%),
@@ -280,20 +286,23 @@
 </div>
 
 <script>
-  /* ========= FLORES DEL RAMO ========= */
+  /* ========= FLORES DEL RAMO =========
+     x,y = posición del CENTRO de la flor dentro de .head
+     s   = tamaño total
+     c   = color */
   const flowers = [
-    { x: 140, y: 0,   s: 90, c: 'f-yellow' },
-    { x: 70,  y: 30,  s: 90, c: 'f-orange' },
-    { x: 150, y: 25,  s: 100,c: 'f-yellow' },
-    { x: 215, y: 30,  s: 90, c: 'f-white'  },
-    { x: 15,  y: 75,  s: 95, c: 'f-yellow' },
-    { x: 95,  y: 70,  s: 105,c: 'f-orange' },
-    { x: 175, y: 70,  s: 105,c: 'f-yellow' },
-    { x: 245, y: 75,  s: 95, c: 'f-white'  },
-    { x: 40,  y: 130, s: 100,c: 'f-orange' },
-    { x: 120, y: 135, s: 110,c: 'f-yellow' },
-    { x: 200, y: 130, s: 100,c: 'f-orange' },
-    { x: 165, y: 105, s: 85, c: 'f-white'  },
+    { x: 160, y: 45,  s: 90,  c: 'f-yellow' },
+    { x: 100, y: 75,  s: 90,  c: 'f-orange' },
+    { x: 175, y: 70,  s: 100, c: 'f-yellow' },
+    { x: 240, y: 75,  s: 90,  c: 'f-white'  },
+    { x: 45,  y: 120, s: 95,  c: 'f-yellow' },
+    { x: 120, y: 115, s: 105, c: 'f-orange' },
+    { x: 195, y: 115, s: 105, c: 'f-yellow' },
+    { x: 270, y: 120, s: 95,  c: 'f-white'  },
+    { x: 75,  y: 180, s: 100, c: 'f-orange' },
+    { x: 155, y: 185, s: 110, c: 'f-yellow' },
+    { x: 235, y: 180, s: 100, c: 'f-orange' },
+    { x: 175, y: 150, s: 85,  c: 'f-white'  },
   ];
 
   const head = document.getElementById('head');
@@ -301,35 +310,44 @@
   flowers.forEach((f, i) => {
     const flower = document.createElement('div');
     flower.className = 'flower ' + f.c;
+    // Posicionamos el CENTRO de la flor
     flower.style.left = f.x + 'px';
-    flower.style.top = f.y + 'px';
-    flower.style.width = f.s + 'px';
-    flower.style.height = f.s + 'px';
+    flower.style.top  = f.y + 'px';
     flower.style.animationDelay = (i * 0.25) + 's';
     flower.style.zIndex = 100 - i;
 
+    /* Pétalos: se generan alrededor del punto (0,0)
+       del .flower (que es el centro). */
     const petalCount = 8;
     const petalW = f.s * 0.42;
     const petalH = f.s * 0.50;
-    const radius = f.s * 0.22;
+    const radius = f.s * 0.26;
 
     for (let j = 0; j < petalCount; j++) {
       const petal = document.createElement('div');
       petal.className = 'petal';
       const angle = (360 / petalCount) * j;
-      petal.style.width = petalW + 'px';
+
+      petal.style.width  = petalW + 'px';
       petal.style.height = petalH + 'px';
-      petal.style.marginLeft = -(petalW / 2) + 'px';
-      petal.style.marginTop = -(petalH / 2) + 'px';
+
+      // Colocamos el pétalo en (0,0) y luego:
+      // 1) translate(-50%, -50%) para centrarlo en su origen
+      // 2) rotate(angle) para orientarlo
+      // 3) translateY(-radius) para alejarlo del centro
       petal.style.transform =
-        `translate(-50%,-50%) rotate(${angle}deg) translateY(-${radius}px)`;
+        `translate(-50%, -50%) rotate(${angle}deg) translateY(-${radius}px)`;
+
       flower.appendChild(petal);
     }
 
+    /* Centro: EXACTAMENTE en (0,0), o sea el centro de la flor */
     const core = document.createElement('div');
     core.className = 'core';
-    core.style.width = (f.s * 0.28) + 'px';   // ⬅️ más pequeño
-    core.style.height = (f.s * 0.28) + 'px';
+    core.style.width  = (f.s * 0.34) + 'px';
+    core.style.height = (f.s * 0.34) + 'px';
+    // translate(-50%,-50%) para que su centro coincida con (0,0)
+    core.style.transform = 'translate(-50%, -50%)';
     flower.appendChild(core);
 
     head.appendChild(flower);
@@ -345,11 +363,11 @@
     p.className = 'falling ' + tones[i % tones.length];
 
     const size = 10 + Math.random() * 16;
-    p.style.width = size + 'px';
+    p.style.width  = size + 'px';
     p.style.height = (size * 1.2) + 'px';
-    p.style.left = Math.random() * 100 + 'vw';
+    p.style.left   = Math.random() * 100 + 'vw';
     p.style.animationDuration = (6 + Math.random() * 6) + 's';
-    p.style.animationDelay = (Math.random() * 8) + 's';
+    p.style.animationDelay    = (Math.random() * 8) + 's';
     p.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
     p.style.opacity = 0.5 + Math.random() * 0.5;
 
