@@ -81,9 +81,9 @@
     bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 260px;
-    height: 26px;
-    background: radial-gradient(ellipse, rgba(120,90,0,.28), transparent 70%);
+    width: 300px;
+    height: 30px;
+    background: radial-gradient(ellipse, rgba(90,60,0,.45), transparent 70%);
     border-radius: 50%;
     z-index: 1;
     pointer-events: none;
@@ -147,11 +147,6 @@
     z-index: 5;
   }
 
-  /* ====== FLOR REESTRUCTURADA ======
-     Cada .flower es un punto (0x0) ubicado con left/top.
-     Los hijos se posicionan alrededor de ese punto con
-     transform: translate(-50%,-50%). Así el core queda
-     EXACTAMENTE en el centro de la flor. */
   .flower {
     position: absolute;
     width: 0;
@@ -194,7 +189,7 @@
   .f-orange .petal { background: radial-gradient(circle at 30% 30%, #ffe08a, #ff9d1c); }
   .f-white  .petal { background: radial-gradient(circle at 30% 30%, #ffffff, #f1e6a6); }
 
-  /* Papel */
+  /* ====== PAPEL MEJORADO ====== */
   .wrap {
     position: absolute;
     bottom: 0;
@@ -203,22 +198,60 @@
     width: 300px;
     height: 300px;
     z-index: 10;
+    filter: drop-shadow(0 20px 25px rgba(90,60,0,.35));
   }
+  /* Capa trasera: kraft dorado más oscuro */
   .wrap .back {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, #fffbe6, #ffd93b);
+    background: linear-gradient(160deg, #e8b800 0%, #c98f00 60%, #a86f00 100%);
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
     border-radius: 0 0 30% 30% / 0 0 20% 20%;
-    box-shadow: 0 18px 35px rgba(0,0,0,.18);
   }
+  /* Capa frontal: amarillo cálido con pliegue */
   .wrap .front {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, #fffef7, #ffe98a);
+    background:
+      linear-gradient(90deg,
+        rgba(0,0,0,.10) 0%,
+        rgba(0,0,0,0) 12%,
+        rgba(0,0,0,0) 50%,
+        rgba(0,0,0,0) 88%,
+        rgba(0,0,0,.10) 100%),
+      linear-gradient(160deg, #fff3b8 0%, #ffd93b 45%, #f0b900 100%);
     clip-path: polygon(30% 10%, 70% 10%, 100% 100%, 0% 100%);
     border-radius: 0 0 35% 35% / 0 0 22% 22%;
-    opacity: .95;
+    box-shadow:
+      inset 8px 0 12px -8px rgba(0,0,0,.25),
+      inset -8px 0 12px -8px rgba(0,0,0,.25),
+      inset 0 -10px 18px -6px rgba(120,80,0,.25);
+  }
+  /* Pliegue central */
+  .wrap .front::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 90%;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,.35),
+      rgba(255,255,255,.0) 60%);
+    border-radius: 50% 50% 40% 40% / 20% 20% 80% 80%;
+    pointer-events: none;
+  }
+  /* Borde dorado fino */
+  .wrap .border {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #d4a300 0%, #a87400 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    border-radius: 0 0 30% 30% / 0 0 20% 20%;
+    z-index: -1;
+    transform: scale(1.02);
+    transform-origin: bottom center;
   }
 
   /* Lazo */
@@ -229,10 +262,10 @@
     transform: translateX(-50%);
     width: 60px;
     height: 30px;
-    background: linear-gradient(180deg, #f5c400, #d9a300);
+    background: linear-gradient(180deg, #ffd11a, #d9a300);
     border-radius: 6px;
     z-index: 15;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
+    box-shadow: 0 4px 8px rgba(120,80,0,.45);
   }
   .ribbon::before,
   .ribbon::after {
@@ -243,18 +276,18 @@
     height: 55px;
     background: linear-gradient(160deg, #ffe066, #e6b800);
     border-radius: 60% 60% 40% 40% / 70% 70% 30% 30%;
-    box-shadow: 0 4px 8px rgba(0,0,0,.15);
+    box-shadow: 0 4px 8px rgba(120,80,0,.35);
   }
   .ribbon::before { left: -38px; transform: rotate(-25deg); }
   .ribbon::after  { right: -38px; transform: rotate(25deg) scaleX(-1); }
   .ribbon .knot {
     position: absolute;
     left: 50%; top: 50%;
-    width: 20px; height: 20px;
-    background: radial-gradient(circle at 35% 35%, #ffe066, #d9a300);
+    width: 22px; height: 22px;
+    background: radial-gradient(circle at 35% 35%, #ffe066, #c99500);
     border-radius: 50%;
     transform: translate(-50%,-50%);
-    box-shadow: inset -1px -1px 3px rgba(0,0,0,.25);
+    box-shadow: inset -1px -1px 3px rgba(0,0,0,.35);
   }
 </style>
 </head>
@@ -278,6 +311,7 @@
     <div class="head" id="head"></div>
 
     <div class="wrap">
+      <div class="border"></div>
       <div class="back"></div>
       <div class="front"></div>
     </div>
@@ -286,10 +320,6 @@
 </div>
 
 <script>
-  /* ========= FLORES DEL RAMO =========
-     x,y = posición del CENTRO de la flor dentro de .head
-     s   = tamaño total
-     c   = color */
   const flowers = [
     { x: 160, y: 45,  s: 90,  c: 'f-yellow' },
     { x: 100, y: 75,  s: 90,  c: 'f-orange' },
@@ -310,14 +340,11 @@
   flowers.forEach((f, i) => {
     const flower = document.createElement('div');
     flower.className = 'flower ' + f.c;
-    // Posicionamos el CENTRO de la flor
     flower.style.left = f.x + 'px';
     flower.style.top  = f.y + 'px';
     flower.style.animationDelay = (i * 0.25) + 's';
     flower.style.zIndex = 100 - i;
 
-    /* Pétalos: se generan alrededor del punto (0,0)
-       del .flower (que es el centro). */
     const petalCount = 8;
     const petalW = f.s * 0.42;
     const petalH = f.s * 0.50;
@@ -327,33 +354,24 @@
       const petal = document.createElement('div');
       petal.className = 'petal';
       const angle = (360 / petalCount) * j;
-
       petal.style.width  = petalW + 'px';
       petal.style.height = petalH + 'px';
-
-      // Colocamos el pétalo en (0,0) y luego:
-      // 1) translate(-50%, -50%) para centrarlo en su origen
-      // 2) rotate(angle) para orientarlo
-      // 3) translateY(-radius) para alejarlo del centro
       petal.style.transform =
         `translate(-50%, -50%) rotate(${angle}deg) translateY(-${radius}px)`;
-
       flower.appendChild(petal);
     }
 
-    /* Centro: EXACTAMENTE en (0,0), o sea el centro de la flor */
     const core = document.createElement('div');
     core.className = 'core';
     core.style.width  = (f.s * 0.34) + 'px';
     core.style.height = (f.s * 0.34) + 'px';
-    // translate(-50%,-50%) para que su centro coincida con (0,0)
     core.style.transform = 'translate(-50%, -50%)';
     flower.appendChild(core);
 
     head.appendChild(flower);
   });
 
-  /* ========= PÉTALOS CAYENDO ========= */
+  /* Pétalos cayendo */
   const fallBox = document.getElementById('petalsFall');
   const tones = ['', 'orange', 'white', 'orange', '', 'white'];
   const TOTAL = 22;
@@ -361,7 +379,6 @@
   for (let i = 0; i < TOTAL; i++) {
     const p = document.createElement('div');
     p.className = 'falling ' + tones[i % tones.length];
-
     const size = 10 + Math.random() * 16;
     p.style.width  = size + 'px';
     p.style.height = (size * 1.2) + 'px';
@@ -370,7 +387,6 @@
     p.style.animationDelay    = (Math.random() * 8) + 's';
     p.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
     p.style.opacity = 0.5 + Math.random() * 0.5;
-
     fallBox.appendChild(p);
   }
 </script>
